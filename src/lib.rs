@@ -1,7 +1,7 @@
 use std::fs::File;
 use std::io::Write;
 use reqwest;
-use rusqlite::Connection;
+use rusqlite::{Connection, ToSql}; 
 use csv;
 
 pub fn extract(
