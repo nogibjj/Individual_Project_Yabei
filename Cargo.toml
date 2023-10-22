@@ -1,4 +1,12 @@
+[package]
+name = "invidivual_project_rust_yabei"
+version = "0.1.0"
+authors = ["Yabei Zeng"]
+edition = "2021"
+
 [dependencies]
 reqwest = "0.11"
 csv = "1.1"
 rusqlite = "0.25"
+assert_cmd = "^2.0"
+predicates = "0.9"
