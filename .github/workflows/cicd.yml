@@ -1,30 +1,77 @@
-name: CI
+name: Rust CI/CD
+
 on:
   push:
     branches: [ "main" ]
   pull_request:
     branches: [ "main" ]
-  workflow_dispatch:
+
+env:
+  CARGO_TERM_COLOR: always
 
 jobs:
   build:
     runs-on: ubuntu-latest
+
     steps:
-      - uses: actions/checkout@v3
-      - name: install packages
-        run: make install
-      - name: lint
-        run: make lint
-      - name: extract 
-        run: make extract 
-      - name: transform_load
-        run: make transform_load 
-      - name: query
-        run: make query
-      - name: test
-        run: make test
-      - name: format
-        run: make format
-      - name: deploy
-        run: make deploy
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    - name: Install Rust toolchain
+      uses: actions-rs/toolchain@v1
+      with:
+          toolchain: stable
+          profile: minimal
+          components: clippy, rustfmt
+          override: true
+
+    - name: Update Linux
+      run: sudo apt update
       
+    - name: update Rust
+      run: make install
+
+    - name: Update Rust
+      run: make install
+
+    - name: Check Rust versions
+      run: make rust-version
+    
+    - name: build Rust
+      run: make release
+
+    - name: Format code
+      run: make format
+
+    - name: Lint code
+      run: make lint
+
+    ## CRUD 
+    - name: Create 
+      run: make create 
+    
+    - name: Read
+      run: make read 
+    
+    - name: Update 
+      run: make update 
+   
+    - name: Delete 
+      run: make delete
+
+    - name: Run tests
+      run: make test
+
+    - name: Pull latest changes
+      run: git pull
+      
+    # Set up Git authentication using PAT
+    # - name: Set up Git authentication
+    #   run: |
+    #     git config --global user.name "GitHub Actions"
+    #     git config --global user.email "actions@github.com"
+    #     git remote set-url origin https://x-access-token:${{ secrets.MY_GITHUB_TOKEN }}@github.com/yabeizeng1121/Mini8.git
+
+           
+    - name: Generate and push logs
+      run: make generate_and_push
