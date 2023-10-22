@@ -26,7 +26,16 @@ run:
 	cargo run
 
 create:
-	cargo run query 'Toyota'
+	cargo run query "INSERT INTO CarsDB (Brand, Model, Year, Price) VALUES ('Toyota', 'Corolla', 2022, 20000);"
+
+read:
+	cargo run query "SELECT * FROM CarsDB WHERE Brand = 'Toyota';"
+
+update:
+	cargo run query "UPDATE CarsDB SET Model='Camry', Year=2023, Price=25000 WHERE Brand = 'Toyota';"
+
+delete:
+	cargo run query "DELETE FROM CarsDB WHERE Brand = 'Toyota';"
 
 release:
 	cargo build --release
