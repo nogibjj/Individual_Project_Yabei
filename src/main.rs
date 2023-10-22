@@ -34,6 +34,7 @@ fn main() {
         }
         let query_string = &args[2];
         query(query_string);  
+    },
         "update_price" => {
             if args.len() < 4 {
                 println!("Usage: {} update_price [brand] [new_price]", args[0]);
