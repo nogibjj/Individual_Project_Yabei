@@ -33,7 +33,7 @@ fn main() {
                 return;
             }
             let brand = &args[2];
-            query_by_brand(brand);
+            query(brand);
         },
         "update_price" => {
             if args.len() < 4 {
