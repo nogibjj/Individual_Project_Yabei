@@ -36,8 +36,12 @@ fn main() {
                 return;
             }
             let query_string = &args[2];
-            query(query_string);
+            match query(query_string) {
+                Ok(message) => println!("{}", message),
+                Err(e) => println!("Error executing query: {}", e),
+            }
         }
+
         "update_price" => {
             if args.len() < 4 {
                 println!("Usage: {} update_price [brand] [new_price]", args[0]);
