@@ -18,17 +18,17 @@ fn main() {
             match file_path {
                 Ok(path) => println!("Data extraction completed successfully. Saved to {}", path),
                 Err(e) => println!("Error during extraction: {}", e),
-            }
+            },
         "load" => {
             let db_path = load("cars.csv");
             match db_path {
                 Ok(path) => println!("Data transformation and loading completed successfully. DB path: {}", path),
                 Err(e) => println!("Error during loading: {}", e),
-            }
+            },
         "query" => {
             query();
             println!("Data querying completed successfully.");
-        }
+        },
         "update_price" => {
             if args.len() < 4 {
                 println!("Usage: {} update_price [brand] [new_price]", args[0]);
