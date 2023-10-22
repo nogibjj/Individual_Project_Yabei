@@ -1,15 +1,12 @@
+use csv;
+use reqwest;
+use rusqlite::{Connection, ToSql};
 use std::fs::File;
 use std::io::Write;
-use reqwest;
-use rusqlite::{Connection, ToSql}; 
-use csv;
 
-pub fn extract(
-    url: &str,
-    file_path: &str
-) -> Result<String, Box<dyn std::error::Error>> {
+pub fn extract(url: &str, file_path: &str) -> Result<String, Box<dyn std::error::Error>> {
     let content = reqwest::blocking::get(url)?.bytes()?;
-    
+
     let mut file = File::create(file_path)?;
     file.write_all(&content)?;
 
@@ -17,12 +14,11 @@ pub fn extract(
 }
 
 pub fn query(query_string: &str) -> Result<String, rusqlite::Error> {
-    
     let conn = Connection::open("CarsDB.db")?;
-    
+
     match conn.execute(query_string, []) {
         Ok(_) => return Ok("Query executed successfully.".to_string()),
-        Err(_) => {}  
+        Err(_) => {}
     }
 
     let mut stmt = conn.prepare(query_string)?;
@@ -36,7 +32,7 @@ pub fn query(query_string: &str) -> Result<String, rusqlite::Error> {
             row.get::<_, String>(5)?,
             row.get::<_, String>(6)?,
             row.get::<_, i32>(7)?,
-            row.get::<_, String>(8)?
+            row.get::<_, String>(8)?,
         ))
     })?;
 
@@ -50,7 +46,7 @@ pub fn query(query_string: &str) -> Result<String, rusqlite::Error> {
 pub fn load(file_path: &str) -> Result<String, Box<dyn std::error::Error>> {
     let file = File::open(file_path)?;
     let mut rdr = csv::ReaderBuilder::new().delimiter(b';').from_reader(file);
-    
+
     let mut payload: Vec<Vec<String>> = Vec::new();
     for result in rdr.records() {
         let record = result?;
@@ -69,7 +65,9 @@ pub fn load(file_path: &str) -> Result<String, Box<dyn std::error::Error>> {
             Brand TEXT, Price REAL, Body TEXT, Mileage INTEGER,
             EngineV REAL, Engine_Type TEXT, Registration TEXT,
             Year INTEGER, Model TEXT
-        )", [])?;
+        )",
+        [],
+    )?;
 
     let tx = conn.transaction()?;
     for row in &payload {
@@ -77,7 +75,7 @@ pub fn load(file_path: &str) -> Result<String, Box<dyn std::error::Error>> {
         tx.execute(
             "INSERT INTO CarsDB (Brand, Price, Body, Mileage, EngineV, Engine_Type, 
             Registration, Year, Model) VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8, ?9)",
-            &params[..],  // Convert Vec to slice
+            &params[..], // Convert Vec to slice
         )?;
     }
     tx.commit()?;
