@@ -46,7 +46,7 @@ The project uses GitHub Actions for continuous integration and continuous deploy
 
 ## Demo Video
 
-A demo video showcasing the functionality of the project can be found [here](#). (Replace `#` with the actual YouTube link)
+A demo video showcasing the functionality of the project can be found [here](#).
 
 ## References
 
