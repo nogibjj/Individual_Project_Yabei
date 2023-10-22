@@ -1,36 +1,57 @@
+# Rust targets
+rust-version:
+	@echo "Rust command-line utility versions:"
+	rustc --version 			# Rust compiler
+	cargo --version 			# Rust package manager
+	rustfmt --version			# Rust code formatter
+	rustup --version			# Rust toolchain manager
+	clippy-driver --version		# Rust linter
+
+format:
+	cargo fmt --quiet
+
 install:
-	pip install --upgrade pip &&\
-		pip install -r requirements.txt
-
-test:
-	python -m pytest -vv --cov=main --cov=mylib test_*.py
-
-format:	
-	black *.py 
+	# Install if needed
+	#@echo "Updating rust toolchain"
+	#rustup update stable
+	#rustup default stable 
 
 lint:
-	#disable comment to test speed
-	#pylint --disable=R,C --ignore-patterns=test_.*?py *.py mylib/*.py
-	#ruff linting is 10-100X faster than pylint
-	ruff check *.py mylib/*.py
+	cargo clippy --quiet
 
-extract:
-	python mylib/extract.py
+test:
+	cargo test --quiet
 
-transform_load:
-	python mylib/transform_load.py
+run:
+	cargo run
 
-query:
-	python mylib/query.py
+release:
+	cargo build --release
 
+clean:
+	cargo clean
 
-container-lint:
-	docker run --rm -i hadolint/hadolint < Dockerfile
+docs:
+	cargo doc --open
 
-refactor: format lint
+update:
+	rustup update
+	cargo update
 
-deploy:
-	#deploy goes here
+check:
+	cargo check
 
-		
-all: install lint test format deploy
+# Combined targets for convenience
+all: format lint test run
+
+generate_and_push:
+	# Add, commit, and push the generated files to GitHub
+	@if [ -n "$$(git status --porcelain)" ]; then \
+		git config --local user.email "action@github.com"; \
+		git config --local user.name "GitHub Action"; \
+		git add .; \
+		git commit -m "Add metric log"; \
+		git push; \
+	else \
+		echo "No changes to commit. Skipping commit and push."; \
+	fi
