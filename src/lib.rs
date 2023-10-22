@@ -16,14 +16,14 @@ pub fn extract(
     Ok(file_path.to_string())
 }
 
-pub fn query(brand: &str) -> Result<String, rusqlite::Error> {
+pub fn query(query_string: &str) -> Result<String, rusqlite::Error> {
     let conn = Connection::open("CarsDB.db")?;
-
+    
     match conn.execute(query_string, []) {
         Ok(_) => return Ok("Query executed successfully.".to_string()),
-        Err(_) => {} 
+        Err(_) => {}  
     }
-    
+
     let mut stmt = conn.prepare(query_string)?;
     let rows = stmt.query_map([], |row| {
         Ok((
@@ -39,7 +39,6 @@ pub fn query(brand: &str) -> Result<String, rusqlite::Error> {
         ))
     })?;
 
-    println!("Top 5 rows of the CarsDB table for brand {}: ", brand);
     for row in rows {
         println!("{:?}", row?);
     }
