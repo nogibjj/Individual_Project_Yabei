@@ -1,7 +1,7 @@
 use std::fs::File;
 use std::io::Write;
 use reqwest;
-use rusqlite::{Connection, NO_PARAMS};
+use rusqlite::Connection;
 use csv;
 
 
@@ -23,7 +23,7 @@ pub fn query() -> Result<String, rusqlite::Error> {
     let conn = Connection::open("CarsDB.db")?;
     
     let mut stmt = conn.prepare("SELECT * FROM CarsDB LIMIT 5")?;
-    let rows = stmt.query_map(NO_PARAMS, |row| {
+    let rows = stmt.query_map([], |row| {
         (
             row.get(0)?,
             row.get(1)?,
