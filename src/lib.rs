@@ -17,6 +17,7 @@ pub fn extract(
 }
 
 pub fn query(query_string: &str) -> Result<String, rusqlite::Error> {
+    
     let conn = Connection::open("CarsDB.db")?;
     
     match conn.execute(query_string, []) {
