@@ -3,7 +3,7 @@ use std::io::Write;
 use reqwest;
 use rusqlite::{Connection, NO_PARAMS};
 use csv;
-use rusqlite::Connection;
+
 
 
 pub fn extract(
