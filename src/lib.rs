@@ -17,7 +17,7 @@ pub fn extract(
 }
 
 pub fn query() -> Result<String, rusqlite::Error> {
-    let conn = Connection::open("CarsDB.db")?;
+    let mut conn = Connection::open("CarsDB.db")?;
     
     let mut stmt = conn.prepare("SELECT * FROM CarsDB LIMIT 5")?;
     let rows = stmt.query_map([], |row| {
@@ -56,7 +56,7 @@ pub fn load(file_path: &str) -> Result<String, Box<dyn std::error::Error>> {
         payload.push(record.iter().map(|s| s.to_string()).collect());
     }
 
-    let conn = Connection::open("CarsDB.db")?;
+    let mut conn = Connection::open("CarsDB.db")?;
     conn.execute("DROP TABLE IF EXISTS CarsDB", [])?;
 
     conn.execute(
@@ -81,7 +81,7 @@ pub fn load(file_path: &str) -> Result<String, Box<dyn std::error::Error>> {
 }
 
 pub fn update_price(brand: &str, new_price: f64) -> Result<(), rusqlite::Error> {
-    let conn = Connection::open("CarsDB.db")?;
+    let mut conn = Connection::open("CarsDB.db")?;
     conn.execute(
         "UPDATE CarsDB SET Price = ?1 WHERE Brand = ?2",
         &[&new_price as &dyn ToSql, &brand as &dyn ToSql],
