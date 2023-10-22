@@ -18,13 +18,15 @@ fn main() {
             match file_path {
                 Ok(path) => println!("Data extraction completed successfully. Saved to {}", path),
                 Err(e) => println!("Error during extraction: {}", e),
-            },
+            }
+        },
         "load" => {
             let db_path = load("cars.csv");
             match db_path {
                 Ok(path) => println!("Data transformation and loading completed successfully. DB path: {}", path),
                 Err(e) => println!("Error during loading: {}", e),
-            },
+            }
+        },
         "query" => {
             query();
             println!("Data querying completed successfully.");
@@ -40,9 +42,9 @@ fn main() {
                 Ok(_) => println!("Updated price for brand {} to {}", brand, new_price),
                 Err(e) => println!("Error updating price: {}", e),
             }
-        }
+        },
         _ => {
             println!("Invalid action. Use 'extract', 'load', 'query', or 'update_price'.");
         }
     }
-}
+
