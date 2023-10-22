@@ -76,7 +76,7 @@ pub fn load(file_path: &str) -> Result<String, Box<dyn std::error::Error>> {
         tx.execute(
             "INSERT INTO CarsDB (Brand, Price, Body, Mileage, EngineV, Engine_Type, 
             Registration, Year, Model) VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8, ?9)",
-            row,
+            &row,
         )?;
 
     }
