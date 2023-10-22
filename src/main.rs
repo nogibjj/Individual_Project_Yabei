@@ -47,4 +47,4 @@ fn main() {
             println!("Invalid action. Use 'extract', 'load', 'query', or 'update_price'.");
         }
     }
-
+}
