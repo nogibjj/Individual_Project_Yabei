@@ -27,14 +27,13 @@ fn main() {
                 Err(e) => println!("Error during loading: {}", e),
             }
         },
-        "query" => {
-            if args.len() < 3 {
-                println!("Usage: {} query [SQL query string]", args[0]);
-                return;
-            }
-            let query_string = &args[2];
-            execute_query(query_string);
-        },
+    "query" => {
+        if args.len() < 3 {
+            println!("Usage: {} query [SQL query string]", args[0]);
+            return;
+        }
+        let query_string = &args[2];
+        query(query_string);  
         "update_price" => {
             if args.len() < 4 {
                 println!("Usage: {} update_price [brand] [new_price]", args[0]);
