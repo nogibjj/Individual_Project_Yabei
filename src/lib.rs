@@ -24,7 +24,7 @@ pub fn query() -> Result<String, rusqlite::Error> {
     
     let mut stmt = conn.prepare("SELECT * FROM CarsDB LIMIT 5")?;
     let rows = stmt.query_map([], |row| {
-        (
+        ok((
             row.get(0)?,
             row.get(1)?,
             row.get(2)?,
@@ -34,7 +34,7 @@ pub fn query() -> Result<String, rusqlite::Error> {
             row.get(6)?,
             row.get(7)?,
             row.get(8)?
-        )
+        ))
     })?;
 
     println!("Top 5 rows of the CarsDB table:");
@@ -68,7 +68,8 @@ pub fn load(file_path: &str) -> Result<String, Box<dyn std::error::Error>> {
             Brand TEXT, Price REAL, Body TEXT, Mileage INTEGER,
             EngineV REAL, Engine_Type TEXT, Registration TEXT,
             Year INTEGER, Model TEXT
-        )")?;
+        )", [])?;
+
 
     let tx = conn.transaction()?;
     for row in &payload {
