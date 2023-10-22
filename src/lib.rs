@@ -61,14 +61,14 @@ pub fn load(file_path: &str) -> Result<String, Box<dyn std::error::Error>> {
     }
 
     let conn = Connection::open("CarsDB.db")?;
-    conn.execute("DROP TABLE IF EXISTS CarsDB", NO_PARAMS)?;
+    conn.execute("DROP TABLE IF EXISTS CarsDB", [])?;
 
     conn.execute(
         "CREATE TABLE CarsDB (
             Brand TEXT, Price REAL, Body TEXT, Mileage INTEGER,
             EngineV REAL, Engine_Type TEXT, Registration TEXT,
             Year INTEGER, Model TEXT
-        )", NO_PARAMS)?;
+        )")?;
 
     let tx = conn.transaction()?;
     for row in &payload {
