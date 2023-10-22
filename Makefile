@@ -25,6 +25,9 @@ test:
 run:
 	cargo run
 
+create:
+	cargo run query 'Toyota'
+
 release:
 	cargo build --release
 
