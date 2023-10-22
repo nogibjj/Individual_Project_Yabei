@@ -1,5 +1,5 @@
-use invidivual_project_rust_yabei::{extract, load, query};
 use std::env;
+use invidivual_project_rust_yabei::{extract, load, query, update_price};
 
 fn main() {
     let args: Vec<String> = env::args().collect();
