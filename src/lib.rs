@@ -4,8 +4,6 @@ use reqwest;
 use rusqlite::Connection;
 use csv;
 
-
-
 pub fn extract(
     url: &str,
     file_path: &str
@@ -18,22 +16,21 @@ pub fn extract(
     Ok(file_path.to_string())
 }
 
-
 pub fn query() -> Result<String, rusqlite::Error> {
     let conn = Connection::open("CarsDB.db")?;
     
     let mut stmt = conn.prepare("SELECT * FROM CarsDB LIMIT 5")?;
     let rows = stmt.query_map([], |row| {
         Ok((
-            row.get(0)?,
-            row.get(1)?,
-            row.get(2)?,
-            row.get(3)?,
-            row.get(4)?,
-            row.get(5)?,
-            row.get(6)?,
-            row.get(7)?,
-            row.get(8)?
+            row.get::<_, String>(0)?,
+            row.get::<_, f64>(1)?,
+            row.get::<_, String>(2)?,
+            row.get::<_, i32>(3)?,
+            row.get::<_, f64>(4)?,
+            row.get::<_, String>(5)?,
+            row.get::<_, String>(6)?,
+            row.get::<_, i32>(7)?,
+            row.get::<_, String>(8)?
         ))
     })?;
 
@@ -44,7 +41,6 @@ pub fn query() -> Result<String, rusqlite::Error> {
 
     Ok("Success".to_string())
 }
-
 
 pub fn load(file_path: &str) -> Result<String, Box<dyn std::error::Error>> {
     let file = File::open(file_path)?;
@@ -70,21 +66,18 @@ pub fn load(file_path: &str) -> Result<String, Box<dyn std::error::Error>> {
             Year INTEGER, Model TEXT
         )", [])?;
 
-
     let tx = conn.transaction()?;
     for row in &payload {
         tx.execute(
             "INSERT INTO CarsDB (Brand, Price, Body, Mileage, EngineV, Engine_Type, 
             Registration, Year, Model) VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8, ?9)",
-            &row,
+            &row[..],
         )?;
-
     }
     tx.commit()?;
 
     Ok("CarsDB.db".to_string())
 }
-
 
 pub fn update_price(brand: &str, new_price: f64) -> Result<(), rusqlite::Error> {
     let conn = Connection::open("CarsDB.db")?;
@@ -94,6 +87,3 @@ pub fn update_price(brand: &str, new_price: f64) -> Result<(), rusqlite::Error> 
     )?;
     Ok(())
 }
-
-
-
