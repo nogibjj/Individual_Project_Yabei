@@ -17,7 +17,7 @@ pub fn extract(
 }
 
 pub fn query() -> Result<String, rusqlite::Error> {
-    let mut conn = Connection::open("CarsDB.db")?;
+    let conn = Connection::open("CarsDB.db")?;
     
     let mut stmt = conn.prepare("SELECT * FROM CarsDB LIMIT 5")?;
     let rows = stmt.query_map([], |row| {
