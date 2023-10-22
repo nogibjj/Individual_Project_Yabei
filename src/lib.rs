@@ -84,7 +84,7 @@ pub fn update_price(brand: &str, new_price: f64) -> Result<(), rusqlite::Error> 
     let conn = Connection::open("CarsDB.db")?;
     conn.execute(
         "UPDATE CarsDB SET Price = ?1 WHERE Brand = ?2",
-        &[&new_price as &dyn ToSql, brand as &dyn ToSql],
+        &[&new_price as &dyn ToSql, &brand as &dyn ToSql],
     )?;
     Ok(())
 }
