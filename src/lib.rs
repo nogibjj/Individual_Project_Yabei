@@ -18,9 +18,14 @@ pub fn extract(
 
 pub fn query(brand: &str) -> Result<String, rusqlite::Error> {
     let conn = Connection::open("CarsDB.db")?;
+
+    match conn.execute(query_string, []) {
+        Ok(_) => return Ok("Query executed successfully.".to_string()),
+        Err(_) => {} 
+    }
     
-    let mut stmt = conn.prepare("SELECT * FROM CarsDB WHERE Brand = ?1 LIMIT 5")?;
-    let rows = stmt.query_map([brand], |row| {
+    let mut stmt = conn.prepare(query_string)?;
+    let rows = stmt.query_map([], |row| {
         Ok((
             row.get::<_, String>(0)?,
             row.get::<_, f64>(1)?,
