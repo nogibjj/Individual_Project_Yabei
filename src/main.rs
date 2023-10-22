@@ -28,8 +28,12 @@ fn main() {
             }
         },
         "query" => {
-            query();
-            println!("Data querying completed successfully.");
+            if args.len() < 3 {
+                println!("Usage: {} query [brand]", args[0]);
+                return;
+            }
+            let brand = &args[2];
+            query_by_brand(brand);
         },
         "update_price" => {
             if args.len() < 4 {
