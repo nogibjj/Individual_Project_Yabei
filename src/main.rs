@@ -29,11 +29,11 @@ fn main() {
         },
         "query" => {
             if args.len() < 3 {
-                println!("Usage: {} query [brand]", args[0]);
+                println!("Usage: {} query [SQL query string]", args[0]);
                 return;
             }
-            let brand = &args[2];
-            query(brand);
+            let query_string = &args[2];
+            execute_query(query_string);
         },
         "update_price" => {
             if args.len() < 4 {
