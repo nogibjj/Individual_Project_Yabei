@@ -29,9 +29,28 @@ To install the dependencies, run:
 
 cargo install rusqlite reqwest
 
-## Use of GitHub Copilot
+## Utilizing GitHub Copilot
 
-During the development of this project, GitHub Copilot was an invaluable tool. It provided real-time code suggestions, helping to streamline the coding process and ensure best practices were followed.
+GitHub Copilot is an AI-powered code completion tool developed by GitHub in collaboration with OpenAI. Throughout the development of this project, GitHub Copilot served as an invaluable assistant, offering the following benefits:
+
+### Code Suggestions
+- **Instant Recommendations**: As I typed, Copilot provided real-time code suggestions, helping speed up the development process.
+- **Contextual Understanding**: Copilot understood the context of the code, offering relevant method and variable name suggestions.
+
+### Error Handling
+- **Identifying Mistakes**: Copilot highlighted potential errors in the code, suggesting more optimal or safer alternatives.
+- **Exception Handling**: It provided guidance on handling potential exceptions and edge cases in the code.
+
+### Documentation and Comments
+- **Auto-generating Comments**: Copilot assisted in generating meaningful comments for functions and complex code blocks, enhancing code readability.
+- **API References**: When working with unfamiliar libraries or APIs, Copilot provided quick references and usage examples.
+
+### Learning and Exploration
+- **Exploring New Libraries**: Copilot suggested best practices and usage patterns when integrating new Rust libraries.
+- **Deepening Rust Knowledge**: By suggesting idiomatic Rust code, Copilot helped reinforce and deepen my understanding of Rust's unique features.
+
+In summary, GitHub Copilot was not just a tool but a collaborative partner in this project. It streamlined the coding process, reduced the likelihood of errors, and provided continuous learning opportunities.
+
 
 ## GitHub Actions
 
