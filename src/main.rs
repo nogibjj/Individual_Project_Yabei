@@ -12,15 +12,19 @@ fn main() {
     match action.as_str() {
         "extract" => {
             let file_path = extract(
-                Some("https://raw.githubusercontent.com/yabeizeng1121/Mini_Project5/main/cars.csv"),
-                Some("cars.csv"),
+                "https://raw.githubusercontent.com/yabeizeng1121/Mini_Project5/main/cars.csv",
+                "cars.csv",
             );
-            println!("Data extraction completed successfully. Saved to {}", file_path);
-        }
+            match file_path {
+                Ok(path) => println!("Data extraction completed successfully. Saved to {}", path),
+                Err(e) => println!("Error during extraction: {}", e),
+            }
         "load" => {
-            let db_path = load(Some("cars.csv"));
-            println!("Data transformation and loading completed successfully. DB path: {}", db_path);
-        }
+            let db_path = load("cars.csv");
+            match db_path {
+                Ok(path) => println!("Data transformation and loading completed successfully. DB path: {}", path),
+                Err(e) => println!("Error during loading: {}", e),
+            }
         "query" => {
             query();
             println!("Data querying completed successfully.");
