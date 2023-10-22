@@ -20,7 +20,6 @@ For example, to update the price of the brand "Toyota" to 20000, run:
 
 cargo run update_price Toyota 20000
 
-
 ## Dependencies
 
 - `rusqlite`: For interacting with SQLite databases.
@@ -29,7 +28,6 @@ cargo run update_price Toyota 20000
 To install the dependencies, run:
 
 cargo install rusqlite reqwest
-
 
 ## Use of GitHub Copilot
 
