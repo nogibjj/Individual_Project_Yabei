@@ -1,33 +1,62 @@
+[![Rust CI/CD](https://github.com/nogibjj/Individual_Project_Yabei/actions/workflows/cicd.yml/badge.svg)](https://github.com/nogibjj/Individual_Project_Yabei/actions/workflows/cicd.yml)
 # Individual Project
 
-This project is a Rust CLI application that interacts with an SQLite database to perform CRUD operations on car data.
+This project is a command-line interface (CLI) application written in Rust that utilizes an SQLite database for storing and querying car data. The application can extract data from a CSV file, transform the data into the desired format, and then load it into an SQLite database.
+
+## Explanation of the project
+This CLI tool allows for:
+
+- Extracting car data from a remote CSV file.
+- Transforming the data and loading it into an SQLite database.
+- Running SQL queries directly from the command-line on the loaded data.
+
+It also logs all SQL queries executed against the database for tracking and auditing purposes.
 
 ## Features
 
-- **Data Extraction**: Extracts car data from a given CSV URL and saves it locally.
-- **Data Loading**: Transforms and loads the extracted data into an SQLite database.
-- **Data Querying**: Queries and displays the top 5 rows of the loaded data from the SQLite database.
-- **Update Price**: Updates the price of a specific car brand in the SQLite database.
+- **Data Extraction**: The `extract` function is responsible for fetching car data from a specified URL that points to a CSV file. Once the data is fetched, it saves this CSV data to a local file, allowing for subsequent processing without needing to re-fetch the data from the internet.
 
+- **Data Transformation and Loading**: The `transform_load` function takes the locally saved CSV file, reads its contents, and then transforms this data into a format suitable for the SQLite database. After the transformation, the function loads (or inserts) the data into the SQLite database. This ensures the raw data from the CSV is stored in a structured and queryable format.
+
+- **Data Querying**: The `query` function provides the capability to execute SQL queries directly against the SQLite database. This function supports various SQL operations, including SELECT, INSERT, UPDATE, and DELETE. The results of SELECT queries, like fetching the top 5 rows from the database, are displayed directly in the command line, allowing users to immediately view and verify the data.
 ## How to Run
 
-1. **Data Extraction**: `cargo run extract`
-2. **Data Loading**: `cargo run load`
-3. **Data Querying**: `cargo run query`
-4. **Update Price**: `cargo run update_price [brand_name] [new_price]`
-
-For example, to update the price of the brand "Toyota" to 20000, run:
-
-cargo run update_price Toyota 20000
+1. **Data Extraction**:
+   ```bash
+   cargo run extract
+   ```
+   or simply
+   ```bash
+   make extract
+   ```
+3. **Data Loading**:
+   ```bash
+   cargo run transform_load
+   ```
+   or simply
+   ```bash
+   make transform_load
+   ```
+5. **Data Querying**:
+   ```bash
+   cargo run query
+   ```
+   or simply
+   ```bash
+   make query
+   ```
 
 ## Dependencies
 
 - `rusqlite`: For interacting with SQLite databases.
 - `reqwest`: For making HTTP requests.
+- `csv`: For parsing CSV data
 
 To install the dependencies, run:
 
-cargo install rusqlite reqwest
+```bash
+cargo build
+```
 
 ## Utilizing GitHub Copilot
 
@@ -60,6 +89,7 @@ The project uses GitHub Actions for continuous integration and continuous deploy
 - Code linting
 - Running tests
 - Building the Rust binary
+  - for the binary download: go to `Git Actions`, clicking the `Workflows`, and you can find the download link at the bottom of the page
 
 ## Demo Video
 
