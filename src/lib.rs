@@ -1,15 +1,14 @@
 use csv::ReaderBuilder;
 use reqwest;
-use rusqlite::{params, Connection};
-use std::fs::File;
-use std::io::{prelude::*, BufReader};
-use std::io::Write;
-use std::fs::OpenOptions;
-use std::fs;
 use reqwest::blocking::Client;
+use rusqlite::{params, Connection};
+use std::fs;
+use std::fs::File;
+use std::fs::OpenOptions;
+use std::io::Write;
+use std::io::{prelude::*, BufReader};
 
 const LOG_FILE: &str = "query_log.md";
-
 
 fn log_query(query: &str, log_file: &str) {
     if let Ok(mut file) = OpenOptions::new().append(true).create(true).open(log_file) {
@@ -129,14 +128,3 @@ pub fn query(query_string: &str) -> Result<String, rusqlite::Error> {
     log_query(query_string, LOG_FILE);
     Ok("Query executed successfully".to_string())
 }
-
-
-
-
-
-
-
-
-                   
-                    
- 
