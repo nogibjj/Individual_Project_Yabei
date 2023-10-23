@@ -12,12 +12,13 @@ const LOG_FILE: &str = "query_log.md";
 
 
 fn log_query(query: &str, log_file: &str) {
-    let mut file = OpenOptions::new()
-        .write(true)
-        .append(true)
-        .open(log_file)
-        .unwrap();
-    writeln!(file, "{}", query).unwrap();
+    if let Ok(mut file) = OpenOptions::new().append(true).create(true).open(log_file) {
+        if let Err(err) = writeln!(file, "```sql\n{}\n```\n", query) {
+            eprintln!("Error writing to log file: {:?}", err);
+        }
+    } else {
+        eprintln!("Error opening log file for writing.");
+    }
 }
 
 #[derive(Debug)]
