@@ -4,6 +4,13 @@ use std::fs::File;
 use std::io::{BufReader, prelude::*};
 use csv::ReaderBuilder;
 
+struct Car {
+    id: i32,
+    brand: String,
+    name: String,
+    horse_power: f64,
+}
+
 // Function to extract data from a URL and save to a file
 pub fn extract(url: &str, file_path: &str) -> Result<String, Box<dyn std::error::Error>> {
     let content = reqwest::blocking::get(url)?.bytes()?;
