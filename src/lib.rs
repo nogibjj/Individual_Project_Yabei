@@ -1,5 +1,5 @@
 use reqwest;
-use rusqlite::{params, Connection, Result as SqlResult};
+use rusqlite::{params, Connection};
 use std::fs::File;
 use std::io::{BufReader, prelude::*};
 use csv::ReaderBuilder;
