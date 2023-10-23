@@ -5,7 +5,7 @@ use std::io::{BufReader, prelude::*};
 use csv::ReaderBuilder;
 
 #[derive(Debug)]
-struct Car {
+pub struct Car {
     car: String,
     mpg: f64,
     cylinders: i32,
@@ -16,6 +16,7 @@ struct Car {
     model: i32,
     origin: String,
 }
+
 
 
 // Function to extract data from a URL and save to a file
