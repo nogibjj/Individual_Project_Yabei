@@ -32,21 +32,12 @@ fn main() {
         }
         "query" => {
             if args.len() < 3 {
-                println!("Usage: {} query [SQL query string]", args[0]);
+                println!("Please provide a SQL query string");
                 return;
             }
             let query_string = &args[2];
-            let results = query();
-            match results {
-                Ok(rows) => {
-                    println!("Top 5 rows of the CarsDB table:");
-                    for row in rows {
-                        println!("{:?}", row);
-                    }
-                }
-                Err(e) => eprintln!("Error executing query: {:?}", e),
-            }
-        }
+            query(query_string).unwrap();
+        },
         _ => {
             println!("Invalid action. Use 'extract', 'transform_load', or 'query'.");
         }
