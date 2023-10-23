@@ -4,6 +4,7 @@ use std::fs::File;
 use std::io::{BufReader, prelude::*};
 use csv::ReaderBuilder;
 
+#[derive(Debug)]
 struct Car {
     id: i32,
     brand: String,
