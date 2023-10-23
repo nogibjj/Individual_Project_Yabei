@@ -46,6 +46,12 @@ jobs:
     - name: Lint code
       run: make lint
 
+    - name: Create CarsDB table
+      run: make create-table
+
+    - name: Insert data into CarsDB
+      run: make create
+
     ## CRUD 
     - name: Create 
       run: make create 
