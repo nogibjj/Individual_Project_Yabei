@@ -59,28 +59,27 @@ pub fn transform_load(dataset: &str) -> Result<String, Box<dyn std::error::Error
     Ok("CarsDB.db".to_string())
 }
 
-// Function to query the top 5 rows from the SQLite database
-pub fn query() -> SqlResult<Vec<(String, f64, i32, f64, f64, f64, f64, i32, String)>> {
+pub fn query(query_string: &str) -> Result<String, rusqlite::Error> {
     let conn = Connection::open("CarsDB.db")?;
-    let mut stmt = conn.prepare("SELECT * FROM CarsDB LIMIT 5")?;
-    let rows = stmt.query_map(params![], |row| {
-        Ok((
-            row.get(0)?,
-            row.get(1)?,
-            row.get(2)?,
-            row.get(3)?,
-            row.get(4)?,
-            row.get(5)?,
-            row.get(6)?,
-            row.get(7)?,
-            row.get(8)?
-        ))
-    })?;
-
-    let mut results = Vec::new();
-    for row_result in rows {
-        results.push(row_result?);
+    
+    if query_string.trim_start().to_uppercase().starts_with("SELECT") {
+        let mut stmt = conn.prepare(query_string)?;
+        let car_iter = stmt.query_map([], |row| {
+            Ok(Car {
+                id: row.get(0)?,
+                brand: row.get(1)?,
+                name: row.get(2)?,
+                horse_power: row.get(3)?,
+            })
+        })?;
+        
+        for car in car_iter {
+            println!("{:?}", car?);
+        }
+    } else {
+        // For non-SELECT statements, just execute the query
+        conn.execute(query_string, [])?;
     }
-
-    Ok(results)
+    
+    Ok("Query executed successfully".to_string())
 }
