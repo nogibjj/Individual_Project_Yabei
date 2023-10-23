@@ -9,8 +9,18 @@ use std::fs;
 use reqwest::blocking::Client;
 
 const LOG_FILE: &str = "query_log.md";
-
 #[derive(Debug)]
+
+
+fn log_query(query: &str, log_file: &str) {
+    let mut file = OpenOptions::new()
+        .write(true)
+        .append(true)
+        .open(log_file)
+        .unwrap();
+    writeln!(file, "{}", query).unwrap();
+}
+
 pub struct Car {
     _car: String,
     _mpg: f64,
@@ -103,32 +113,29 @@ pub fn query(query_string: &str) -> Result<String, rusqlite::Error> {
 
         for result in car_iter {
             match result {
-                Ok((
-                    id,
-                    Car,
-                    MPG,
-                    Cylinders,
-                    Displacement,
-                    Horsepower,
-                    Weight,
-                    Acceleration,
-                    Model,
-                    Origin,
-                )) => {
+                Ok(car) => {
                     println!(
-                        "Results: id = {}, Car = {}, MPG = {}, Cylinders = {}, Displacement = {}, Horsepower = {}, Weight = {}, Acceleration = {}, Model = {}, Origin = {}",
-                        id, Car, MPG, Cylinders, Displacement, Horsepower, Weight, Acceleration, Model, Origin
+                        "Results: Car = {}, MPG = {}, Cylinders = {}, Displacement = {}, Horsepower = {}, Weight = {}, Acceleration = {}, Model = {}, Origin = {}",
+                        car._car, car._mpg, car._cylinders, car._displacement, car._horsepower, car._weight, car._acceleration, car._model, car._origin
                     );
                 }
-                 Err(e) => eprintln!("Error in row: {:?}", e),
+                Err(e) => eprintln!("Error in row: {:?}", e),
             }
         }
-    }else{
-        let _num_affected_rows = conn.execute_batch(query)?;
+    } else {
+        let _num_affected_rows = conn.execute_batch(query_string)?;
     }
-    log_query(query, LOG_FILE);
-    Ok(())
+    log_query(query_string, LOG_FILE);
+    Ok("Query executed successfully".to_string())
 }
+
+
+
+
+
+
+
+
                    
                     
  
