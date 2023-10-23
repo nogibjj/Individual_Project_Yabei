@@ -6,16 +6,17 @@ use csv::ReaderBuilder;
 
 #[derive(Debug)]
 pub struct Car {
-    car: String,
-    mpg: f64,
-    cylinders: i32,
-    displacement: f64,
-    horsepower: f64,
-    weight: f64,
-    acceleration: f64,
-    model: i32,
-    origin: String,
+    _car: String,
+    _mpg: f64,
+    _cylinders: i32,
+    _displacement: f64,
+    _horsepower: f64,
+    _weight: f64,
+    _acceleration: f64,
+    _model: i32,
+    _origin: String,
 }
+
 
 
 
