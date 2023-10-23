@@ -95,13 +95,34 @@ pub fn query(query_string: &str) -> Result<String, rusqlite::Error> {
             })
         })?;
 
-        for car in car_iter {
-            println!("{:?}", car?);
+        for result in car_iter {
+            match result {
+                Ok((
+                    id,
+                    Car,
+                    MPG,
+                    Cylinders,
+                    Displacement,
+                    Horsepower,
+                    Weight,
+                    Acceleration,
+                    Model,
+                    Origin,
+                )) => {
+                    println!(
+                        "Results: id = {}, Car = {}, MPG = {}, Cylinders = {}, Displacement = {}, Horsepower = {}, Weight = {}, Acceleration = {}, Model = {}, Origin = {}",
+                        id, Car, MPG, Cylinders, Displacement, Horsepower, Weight, Acceleration, Model, Origin
+                    );
+                }
+                 Err(e) => eprintln!("Error in row: {:?}", e),
+            }
         }
-    } else {
-        // For non-SELECT statements, just execute the query
-        conn.execute(query_string, [])?;
+    }else{
+        let _num_affected_rows = conn.execute_batch(query)?;
     }
-
-    Ok("Query executed successfully".to_string())
+    log_query(query, LOG_FILE);
+    Ok(())
 }
+                   
+                    
+ 
