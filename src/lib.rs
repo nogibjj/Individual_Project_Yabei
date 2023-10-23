@@ -9,7 +9,6 @@ use std::fs;
 use reqwest::blocking::Client;
 
 const LOG_FILE: &str = "query_log.md";
-#[derive(Debug)]
 
 
 fn log_query(query: &str, log_file: &str) {
@@ -21,6 +20,7 @@ fn log_query(query: &str, log_file: &str) {
     writeln!(file, "{}", query).unwrap();
 }
 
+#[derive(Debug)]
 pub struct Car {
     _car: String,
     _mpg: f64,
