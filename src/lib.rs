@@ -3,6 +3,12 @@ use reqwest;
 use rusqlite::{params, Connection};
 use std::fs::File;
 use std::io::{prelude::*, BufReader};
+use std::io::Write;
+use std::fs::OpenOptions
+use std::fs;
+use reqwest::blocking::Client;
+
+const LOG_FILE: &str = "query_log.md";
 
 #[derive(Debug)]
 pub struct Car {
