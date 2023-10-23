@@ -1,4 +1,4 @@
-use invidivual_project_rust_yabei::{extract, load, query, update_price};
+use invidivual_project_rust_yabei::{extract, transform_load, query};
 use std::env;
 
 fn main() {
@@ -11,23 +11,23 @@ fn main() {
     let action = &args[1];
     match action.as_str() {
         "extract" => {
-            let file_path = extract(
+            let result = extract(
                 "https://raw.githubusercontent.com/yabeizeng1121/Mini_Project5/main/cars.csv",
                 "cars.csv",
             );
-            match file_path {
+            match result {
                 Ok(path) => println!("Data extraction completed successfully. Saved to {}", path),
-                Err(e) => println!("Error during extraction: {}", e),
+                Err(e) => eprintln!("Error during extraction: {:?}", e),
             }
         }
-        "load" => {
-            let db_path = load("cars.csv");
-            match db_path {
+        "transform_load" => {
+            let result = transform_load("cars.csv");
+            match result {
                 Ok(path) => println!(
                     "Data transformation and loading completed successfully. DB path: {}",
                     path
                 ),
-                Err(e) => println!("Error during loading: {}", e),
+                Err(e) => eprintln!("Error during loading: {:?}", e),
             }
         }
         "query" => {
@@ -36,26 +36,19 @@ fn main() {
                 return;
             }
             let query_string = &args[2];
-            match query(query_string) {
-                Ok(message) => println!("{}", message),
-                Err(e) => println!("Error executing query: {}", e),
-            }
-        }
-
-        "update_price" => {
-            if args.len() < 4 {
-                println!("Usage: {} update_price [brand] [new_price]", args[0]);
-                return;
-            }
-            let brand = &args[2];
-            let new_price: f64 = args[3].parse().unwrap_or(0.0);
-            match update_price(brand, new_price) {
-                Ok(_) => println!("Updated price for brand {} to {}", brand, new_price),
-                Err(e) => println!("Error updating price: {}", e),
+            let results = query();
+            match results {
+                Ok(rows) => {
+                    println!("Top 5 rows of the CarsDB table:");
+                    for row in rows {
+                        println!("{:?}", row);
+                    }
+                }
+                Err(e) => eprintln!("Error executing query: {:?}", e),
             }
         }
         _ => {
-            println!("Invalid action. Use 'extract', 'load', 'query', or 'update_price'.");
+            println!("Invalid action. Use 'extract', 'transform_load', or 'query'.");
         }
     }
 }

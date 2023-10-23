@@ -1,93 +1,86 @@
-use csv;
 use reqwest;
-use rusqlite::{Connection, ToSql};
+use rusqlite::{params, Connection, Result as SqlResult};
 use std::fs::File;
-use std::io::Write;
+use std::io::{BufReader, prelude::*};
+use csv::ReaderBuilder;
 
+// Function to extract data from a URL and save to a file
 pub fn extract(url: &str, file_path: &str) -> Result<String, Box<dyn std::error::Error>> {
     let content = reqwest::blocking::get(url)?.bytes()?;
-
     let mut file = File::create(file_path)?;
     file.write_all(&content)?;
-
     Ok(file_path.to_string())
 }
 
-pub fn query(query_string: &str) -> Result<String, rusqlite::Error> {
+// Function to load CSV data into SQLite
+pub fn transform_load(dataset: &str) -> Result<String, Box<dyn std::error::Error>> {
     let conn = Connection::open("CarsDB.db")?;
 
-    match conn.execute(query_string, []) {
-        Ok(_) => return Ok("Query executed successfully.".to_string()),
-        Err(_) => {}
-    }
+    conn.execute("DROP TABLE IF EXISTS CarsDB", params![])?;
 
-    let mut stmt = conn.prepare(query_string)?;
-    let rows = stmt.query_map([], |row| {
-        Ok((
-            row.get::<_, String>(0)?,
-            row.get::<_, f64>(1)?,
-            row.get::<_, String>(2)?,
-            row.get::<_, i32>(3)?,
-            row.get::<_, f64>(4)?,
-            row.get::<_, String>(5)?,
-            row.get::<_, String>(6)?,
-            row.get::<_, i32>(7)?,
-            row.get::<_, String>(8)?,
-        ))
-    })?;
+    let create_table_query = "
+        CREATE TABLE CarsDB (
+            Car TEXT,
+            MPG REAL,
+            Cylinders INTEGER,
+            Displacement REAL,
+            Horsepower REAL,
+            Weight REAL,
+            Acceleration REAL,
+            Model INTEGER,
+            Origin TEXT
+        )
+    ";
+    conn.execute(create_table_query, params![])?;
 
-    for row in rows {
-        println!("{:?}", row?);
-    }
+    let file = File::open(dataset)?;
+    let reader = BufReader::new(file);
+    let mut rdr = ReaderBuilder::new().delimiter(b';').from_reader(reader);
 
-    Ok("Success".to_string())
-}
-
-pub fn load(file_path: &str) -> Result<String, Box<dyn std::error::Error>> {
-    let file = File::open(file_path)?;
-    let mut rdr = csv::ReaderBuilder::new().delimiter(b';').from_reader(file);
-
-    let mut payload: Vec<Vec<String>> = Vec::new();
     for result in rdr.records() {
         let record = result?;
-        if record.len() != 9 {
-            println!("Incorrect number of fields in row: {:?}", record);
-            continue;
-        }
-        payload.push(record.iter().map(|s| s.to_string()).collect());
-    }
-
-    let mut conn = Connection::open("CarsDB.db")?;
-    conn.execute("DROP TABLE IF EXISTS CarsDB", [])?;
-
-    conn.execute(
-        "CREATE TABLE CarsDB (
-            Brand TEXT, Price REAL, Body TEXT, Mileage INTEGER,
-            EngineV REAL, Engine_Type TEXT, Registration TEXT,
-            Year INTEGER, Model TEXT
-        )",
-        [],
-    )?;
-
-    let tx = conn.transaction()?;
-    for row in &payload {
-        let params: Vec<&dyn ToSql> = row.iter().map(|s| s as &dyn ToSql).collect();
-        tx.execute(
-            "INSERT INTO CarsDB (Brand, Price, Body, Mileage, EngineV, Engine_Type, 
-            Registration, Year, Model) VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8, ?9)",
-            &params[..], // Convert Vec to slice
+        conn.execute(
+            "INSERT INTO CarsDB (Car, MPG, Cylinders, Displacement, Horsepower, Weight, Acceleration, Model, Origin) 
+             VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8, ?9)",
+            params![
+                record.get(0).unwrap_or(""),
+                record.get(1).unwrap_or("0.0").parse::<f64>().unwrap_or(0.0),
+                record.get(2).unwrap_or("0").parse::<i32>().unwrap_or(0),
+                record.get(3).unwrap_or("0.0").parse::<f64>().unwrap_or(0.0),
+                record.get(4).unwrap_or("0.0").parse::<f64>().unwrap_or(0.0),
+                record.get(5).unwrap_or("0.0").parse::<f64>().unwrap_or(0.0),
+                record.get(6).unwrap_or("0.0").parse::<f64>().unwrap_or(0.0),
+                record.get(7).unwrap_or("0").parse::<i32>().unwrap_or(0),
+                record.get(8).unwrap_or("")
+            ],
         )?;
     }
-    tx.commit()?;
 
     Ok("CarsDB.db".to_string())
 }
 
-pub fn update_price(brand: &str, new_price: f64) -> Result<(), rusqlite::Error> {
+// Function to query the top 5 rows from the SQLite database
+pub fn query() -> SqlResult<Vec<(String, f64, i32, f64, f64, f64, f64, i32, String)>> {
     let conn = Connection::open("CarsDB.db")?;
-    conn.execute(
-        "UPDATE CarsDB SET Price = ?1 WHERE Brand = ?2",
-        &[&new_price as &dyn ToSql, &brand as &dyn ToSql],
-    )?;
-    Ok(())
+    let mut stmt = conn.prepare("SELECT * FROM CarsDB LIMIT 5")?;
+    let rows = stmt.query_map(params![], |row| {
+        Ok((
+            row.get(0)?,
+            row.get(1)?,
+            row.get(2)?,
+            row.get(3)?,
+            row.get(4)?,
+            row.get(5)?,
+            row.get(6)?,
+            row.get(7)?,
+            row.get(8)?
+        ))
+    })?;
+
+    let mut results = Vec::new();
+    for row_result in rows {
+        results.push(row_result?);
+    }
+
+    Ok(results)
 }

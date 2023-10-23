@@ -1,68 +1,70 @@
-# Rust targets
+# Display Rust command-line utility versions
 rust-version:
 	@echo "Rust command-line utility versions:"
-	rustc --version 			# Rust compiler
-	cargo --version 			# Rust package manager
-	rustfmt --version			# Rust code formatter
-	rustup --version			# Rust toolchain manager
-	clippy-driver --version		# Rust linter
+	rustc --version              # Rust compiler
+	cargo --version              # Rust package manager
+	rustfmt --version            # Rust code formatter
+	rustup --version             # Rust toolchain manager
+	clippy-driver --version      # Rust linter
 
+# Format code using rustfmt
 format:
 	cargo fmt --quiet
 
-install:
-	# Install if needed
-	#@echo "Updating rust toolchain"
-	#rustup update stable
-	#rustup default stable 
-
+# Run clippy for linting
 lint:
 	cargo clippy --quiet
 
+# Run tests
 test:
 	cargo test --quiet
 
+# Build and run the project
 run:
 	cargo run
 
-create:
-	cargo run query "INSERT INTO CarsDB (Brand, Model, Year, Price) VALUES ('Toyota', 'Corolla', 2022, 20000);"
-
-read:
-	cargo run query "SELECT * FROM CarsDB WHERE Brand = 'Toyota';"
-
-update:
-	cargo run query "UPDATE CarsDB SET Model='Camry', Year=2023, Price=25000 WHERE Brand = 'Toyota';"
-
-delete:
-	cargo run query "DELETE FROM CarsDB WHERE Brand = 'Toyota';"
-
+# Build release version
 release:
 	cargo build --release
 
-clean:
-	cargo clean
+# Extract data
+extract: 
+	cargo run extract
 
-docs:
-	cargo doc --open
+# Transform and Load data
+transform_load:
+	cargo run transform_load
 
+# Query the top 5 rows from the CarsDB table
+query:
+	cargo run query
+
+# Insert a new car entry into the CarsDB table
+create:
+	cargo run query "INSERT INTO CarsDB (Car, MPG, Cylinders, Displacement, Horsepower, Weight, Acceleration, Model, Origin) VALUES ('Example Car', 25.0, 4, 150.0, 100.0, 2500.0, 10.0, 2023, 'US');"
+
+# Read a specific car entry from the CarsDB table using the Car name
+read:
+	cargo run query "SELECT * FROM CarsDB WHERE Car = 'Chevrolet Chevelle Malibu';"
+
+# Update a specific car entry in the CarsDB table
 update:
-	rustup update
-	cargo update
+	cargo run query "UPDATE CarsDB SET MPG=20.0, Cylinders=6 WHERE Car = 'Chevrolet Chevelle Malibu';"
 
-check:
-	cargo check
+# Delete a specific car entry from the CarsDB table
+delete:
+	cargo run query "DELETE FROM CarsDB WHERE Car = 'Chevrolet Chevelle Malibu';"
 
-# Combined targets for convenience
+# Run all formatting, linting, and testing tasks
 all: format lint test run
 
+# Generate and push changes to GitHub
 generate_and_push:
-	# Add, commit, and push the generated files to GitHub
 	@if [ -n "$$(git status --porcelain)" ]; then \
-		git config --local user.email "action@github.com"; \
+		git config --local usetest.rsr.email "action@github.com"; \
 		git config --local user.name "GitHub Action"; \
 		git add .; \
-		git commit -m "Add metric log"; \
+		git commit -m "Add query log"; \
 		git push; \
 	else \
 		echo "No changes to commit. Skipping commit and push."; \
