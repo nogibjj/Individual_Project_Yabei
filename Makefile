@@ -46,7 +46,9 @@ transform_load:
 query:
 	cargo run query
 
-# Insert a new car entry into the CarsDB table
+create-table:
+    cargo run query "CREATE TABLE IF NOT EXISTS CarsDB (Car TEXT, MPG REAL, Cylinders INTEGER, Displacement REAL, Horsepower REAL, Weight REAL, Acceleration REAL, Model INTEGER, Origin TEXT);"
+
 create:
 	cargo run query "INSERT INTO CarsDB (Car, MPG, Cylinders, Displacement, Horsepower, Weight, Acceleration, Model, Origin) VALUES ('Example Car', 25.0, 4, 150.0, 100.0, 2500.0, 10.0, 2023, 'US');"
 
