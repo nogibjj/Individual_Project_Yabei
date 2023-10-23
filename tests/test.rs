@@ -16,15 +16,6 @@ fn test_extract_and_transform_load() {
 
 
 #[test]
-fn test_transform_load() {
-    let dataset = "cars_test.csv";  // Using the file created by test_extract
-    let result = transform_load(dataset);
-
-    // Check if the database was successfully created
-    assert_eq!(result.unwrap(), "CarsDB.db");
-}
-
-#[test]
 fn test_query() {
     // Query the top 5 rows from the CarsDB table
     let result = query("SELECT * FROM CarsDB LIMIT 5;");
