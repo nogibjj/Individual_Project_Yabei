@@ -1,3 +1,10 @@
+install:
+	@echo "Checking if Rust is installed..."
+	@which rustc &> /dev/null || curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
+	@echo "Installing project dependencies..."
+	@cargo build
+
+
 # Display Rust command-line utility versions
 rust-version:
 	@echo "Rust command-line utility versions:"
