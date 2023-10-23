@@ -6,11 +6,17 @@ use csv::ReaderBuilder;
 
 #[derive(Debug)]
 struct Car {
-    id: i32,
-    brand: String,
-    name: String,
-    horse_power: f64,
+    car: String,
+    mpg: f64,
+    cylinders: i32,
+    displacement: f64,
+    horsepower: f64,
+    weight: f64,
+    acceleration: f64,
+    model: i32,
+    origin: String,
 }
+
 
 // Function to extract data from a URL and save to a file
 pub fn extract(url: &str, file_path: &str) -> Result<String, Box<dyn std::error::Error>> {
