@@ -1,4 +1,4 @@
-use invidivual_project_rust_yabei::{extract, transform_load, query};
+use invidivual_project_rust_yabei::{extract, query, transform_load};
 
 #[test]
 fn test_extract_and_transform_load() {
@@ -14,7 +14,6 @@ fn test_extract_and_transform_load() {
     assert_eq!(result.unwrap(), "CarsDB.db");
 }
 
-
 #[test]
 fn test_query() {
     // Query the top 5 rows from the CarsDB table
@@ -22,5 +21,4 @@ fn test_query() {
 
     // Check if the query was successful and returns 5 rows
     assert!(result.is_ok());
-
 }

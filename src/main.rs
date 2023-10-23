@@ -1,4 +1,4 @@
-use invidivual_project_rust_yabei::{extract, transform_load, query};
+use invidivual_project_rust_yabei::{extract, query, transform_load};
 use std::env;
 
 fn main() {
@@ -37,7 +37,7 @@ fn main() {
             }
             let query_string = &args[2];
             query(query_string).unwrap();
-        },
+        }
         _ => {
             println!("Invalid action. Use 'extract', 'transform_load', or 'query'.");
         }

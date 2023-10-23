@@ -1,8 +1,8 @@
+use csv::ReaderBuilder;
 use reqwest;
 use rusqlite::{params, Connection};
 use std::fs::File;
-use std::io::{BufReader, prelude::*};
-use csv::ReaderBuilder;
+use std::io::{prelude::*, BufReader};
 
 #[derive(Debug)]
 pub struct Car {
@@ -16,9 +16,6 @@ pub struct Car {
     _model: i32,
     _origin: String,
 }
-
-
-
 
 // Function to extract data from a URL and save to a file
 pub fn extract(url: &str, file_path: &str) -> Result<String, Box<dyn std::error::Error>> {
@@ -77,8 +74,12 @@ pub fn transform_load(dataset: &str) -> Result<String, Box<dyn std::error::Error
 
 pub fn query(query_string: &str) -> Result<String, rusqlite::Error> {
     let conn = Connection::open("CarsDB.db")?;
-    
-    if query_string.trim_start().to_uppercase().starts_with("SELECT") {
+
+    if query_string
+        .trim_start()
+        .to_uppercase()
+        .starts_with("SELECT")
+    {
         let mut stmt = conn.prepare(query_string)?;
         let car_iter = stmt.query_map([], |row| {
             Ok(Car {
@@ -93,7 +94,7 @@ pub fn query(query_string: &str) -> Result<String, rusqlite::Error> {
                 _origin: row.get(8)?,
             })
         })?;
-        
+
         for car in car_iter {
             println!("{:?}", car?);
         }
@@ -101,6 +102,6 @@ pub fn query(query_string: &str) -> Result<String, rusqlite::Error> {
         // For non-SELECT statements, just execute the query
         conn.execute(query_string, [])?;
     }
-    
+
     Ok("Query executed successfully".to_string())
 }
