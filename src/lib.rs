@@ -82,15 +82,15 @@ pub fn query(query_string: &str) -> Result<String, rusqlite::Error> {
         let mut stmt = conn.prepare(query_string)?;
         let car_iter = stmt.query_map([], |row| {
             Ok(Car {
-                car: row.get(0)?,
-                mpg: row.get(1)?,
-                cylinders: row.get(2)?,
-                displacement: row.get(3)?,
-                horsepower: row.get(4)?,
-                weight: row.get(5)?,
-                acceleration: row.get(6)?,
-                model: row.get(7)?,
-                origin: row.get(8)?,
+                _car: row.get(0)?,
+                _mpg: row.get(1)?,
+                _cylinders: row.get(2)?,
+                _displacement: row.get(3)?,
+                _horsepower: row.get(4)?,
+                _weight: row.get(5)?,
+                _acceleration: row.get(6)?,
+                _model: row.get(7)?,
+                _origin: row.get(8)?,
             })
         })?;
         
