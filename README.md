@@ -93,7 +93,7 @@ The project uses GitHub Actions for continuous integration and continuous deploy
 
 ## Demo Video
 
-A demo video showcasing the functionality of the project can be found [here](#).
+A demo video showcasing the functionality of the project can be found [here](https://youtu.be/aQTZdcfjHT4).
 
 ## References
 
